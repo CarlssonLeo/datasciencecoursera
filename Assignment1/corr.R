@@ -1,12 +1,19 @@
 corr <- function(directory, threshold = 0) {
-        ## 'directory' is a character vector of length 1 indicating the
-        ## location of the csv files
         
-        ## 'threshold' is a numeric vector of length 1 indicating the
-        ## number of completely observed observations (on all
-        ## variables) required to compete the correlation between 
-        ## nitrate and sulfate; the default is 0
-        
-        ## Return a numeric vector of correlations
-        ## NOTE: do not round the result! 
+        #Creates an indexed list of files
+        file_use <- list.files(paste(getwd(),"/",directory,sep="")) 
+        data_frame <- data.frame() #Creates an empty data frame
+        x<- c()
+        for (i in length(file_use)) { #loop that goes through id, using it as index,
+                #and depositing file in frame
+                data_frame <- read.csv(paste(getwd(),"/",directory,"/",file_use[i],sep=""))
+                good<-complete.cases(data_frame)
+                
+                if(threshold > nrow(data_frame[good,])) { 
+                x <- append(x, cor(data_frame$nitrate, data_frame$sulfate, use = "complete.obs"))
+                        
+                }    
+               
+        }
+        x   
 }

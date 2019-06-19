@@ -2,18 +2,25 @@ corr <- function(directory, threshold = 0) {
         
         #Creates an indexed list of files
         file_use <- list.files(paste(getwd(),"/",directory,sep="")) 
-        data_frame <- data.frame() #Creates an empty data frame
-        x<- c()
-        for (i in length(file_use)) { #loop that goes through id, using it as index,
-                #and depositing file in frame
-                data_frame <- read.csv(paste(getwd(),"/",directory,"/",file_use[i],sep=""))
-                good<-complete.cases(data_frame)
+        data_deposit <- data.frame() #Creates an empty data frame
+        cor_print <- c()
+        for (i in 1:length(file_use)) {   #loop that goes through all files in directory, 
+                                        #using the number of files as index,
+                                        #and depositing file in frame
+                data_deposit <- read.csv(paste(getwd(),"/",directory,"/",file_use[i],sep=""))
+                good<-complete.cases(data_deposit)
                 
-                if(threshold > nrow(data_frame[good,])) { 
-                x <- append(x, cor(data_frame$nitrate, data_frame$sulfate, use = "complete.obs"))
+                #Measures logically if threshold is larger than the number of
+                #complete pairs. If it is, it appends cor_print with the correlation
+                if(threshold > nrow(data_deposit[good,])) { 
+                cor_print <- append(cor_print,cor(
+                        data_deposit["nitrate"], 
+                        data_deposit["sulfate"], 
+                        use = "pairwise.complete.obs"),
+                        after = length(cor_print))
                         
-                }    
-               
+                }  
+                cor_print
         }
-        x   
+           
 }

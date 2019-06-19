@@ -13,15 +13,10 @@ corr <- function(directory, threshold = 0) {
                 
                 #Measures logically if threshold is larger than the number of
                 #complete pairs. If it is, it appends cor_print with the correlation
-                if(threshold > nrow(data_deposit[good,])) { 
-                cor_print <- append(cor_print,cor(
-                        data_deposit["nitrate"], 
-                        data_deposit["sulfate"], 
-                        use = "pairwise.complete.obs"),
-                        after = length(cor_print))
-                        
+                if(threshold < nrow(data_deposit[good,])) { 
+                cor_print <- append(cor_print,cor(data_deposit["nitrate"], data_deposit["sulfate"], use = "pairwise.complete.obs"),after = length(cor_print))
                 }  
-                cor_print #prints the results
+                
         }
-           
+        cor_print #prints the results
 }
